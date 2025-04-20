@@ -85,7 +85,7 @@
   <div class="container">
     <!-- Header with Logo -->
     <div class="text-center mb-6">
-      <img src="C:\from1to7\public" alt="From 1 to 7 Logo" class="header-logo" /> <!-- Replace 'logo.png' with your logo path -->
+      <img src="logo.png" alt="From 1 to 7 Logo" class="header-logo" /> <!-- Ensure logo.png is in public/ -->
       <h1 class="text-3xl font-bold text-gray-800 mt-4">From 1 to 7 Tutoring</h1>
     </div>
 
@@ -97,7 +97,7 @@
       <p class="mt-2 text-gray-600"><strong>Banking Details for Manual Payments:</strong></p>
       <p class="text-gray-600">Capitec: ML Mataboge, Savings, account number 1111186853 (or cellphone 0766440806)</p>
       <p class="text-gray-600">Absa: ML Mataboge, Savings, account number 9383554680</p>
-      <p class="mt-2 text-gray-600"><strong>Refund Policy:</strong> Full refunds for cancellations made 24 hours before the session. Email us to request a refund.</p>
+      <p class="mt-2 text-gray-600"><strong>Refund Policy:</strong> No refunds for cancellations. You can reschedule a maximum 3 times only.</p>
     </div>
 
     <!-- Booking Form -->
@@ -120,7 +120,6 @@
           <option value="">Select Gender</option>
           <option value="Male">Male</option>
           <option value="Female">Female</option>
-          <option value="Other">Other</option>
         </select>
       </div>
       <div class="mb-4">
@@ -159,7 +158,7 @@
         <input type="email" name="email" required class="form-input" placeholder="e.g., student@gmail.com">
       </div>
       <div class="mb-4">
-        <label class="form-label">School Name</label>
+        <label class="form-label">School Name (Optional)</label>
         <input type="text" name="school" class="form-input" placeholder="e.g., Parktown High">
       </div>
       <div class="mb-4">
@@ -209,7 +208,7 @@
       minDate: "today",
       time_24hr: true,
       minuteIncrement: 60 // Whole hours only
-      // Removed restrictions for 24/7/365 availability
+      // 24/7/365 availability
     });
 
     // Handle form submission
