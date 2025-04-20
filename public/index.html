@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>From 1 to 7 - Book a Tutoring Session</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://js.paystack.co/v1/inline.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f0f4f8;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+    .form-label {
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+    .form-input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.5rem;
+      transition: border-color 0.3s ease;
+    }
+    .form-input:focus {
+      outline: none;
+      border-color: #4a90e2;
+      box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+    }
+    .form-section {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 0.75rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 2rem;
+    }
+    .header-logo {
+      max-width: 150px;
+      margin: 0 auto;
+      display: block;
+    }
+    .btn-primary {
+      background-color: #4a90e2;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+    }
+    .btn-primary:hover {
+      background-color: #357abd;
+    }
+    .btn-secondary {
+      background-color: #a0aec0;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+    }
+    .btn-secondary:hover {
+      background-color: #7a8799;
+    }
+    @media (max-width: 640px) {
+      .container {
+        padding: 1rem;
+      }
+      .form-section {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header with Logo -->
+    <div class="text-center mb-6">
+      <img src="C:\from1to7\public" alt="From 1 to 7 Logo" class="header-logo" /> <!-- Replace 'logo.png' with your logo path -->
+      <h1 class="text-3xl font-bold text-gray-800 mt-4">From 1 to 7 Tutoring</h1>
+    </div>
+
+    <!-- About Section -->
+    <div class="form-section">
+      <h2 class="text-xl font-semibold text-gray-800 mb-4">About From 1 to 7 Tutoring</h2>
+      <p class="text-gray-600">We provide online tutoring for South African pupils, helping you improve from pass mark level 1 to level 7. Sessions are R100/hour/session/topic (whichever is the lesser) via Microsoft Teams, Zoom, or Google Meet.</p>
+      <p class="mt-2 text-gray-600"><strong>Contact:</strong> Mdu Mataboge | leonard.m.mataboge@gmail.com | +27766440806</p>
+      <p class="mt-2 text-gray-600"><strong>Banking Details for Manual Payments:</strong></p>
+      <p class="text-gray-600">Capitec: ML Mataboge, Savings, account number 1111186853 (or cellphone 0766440806)</p>
+      <p class="text-gray-600">Absa: ML Mataboge, Savings, account number 9383554680</p>
+      <p class="mt-2 text-gray-600"><strong>Refund Policy:</strong> Full refunds for cancellations made 24 hours before the session. Email us to request a refund.</p>
+    </div>
+
+    <!-- Booking Form -->
+    <form id="bookingForm" class="form-section" enctype="multipart/form-data">
+      <div class="mb-4">
+        <label class="form-label">Name*</label>
+        <input type="text" name="name" required class="form-input" placeholder="e.g., Thandi">
+      </div>
+      <div class="mb-4">
+        <label class="form-label">Surname*</label>
+        <input type="text" name="surname" required class="form-input" placeholder="e.g., Mkhize">
+      </div>
+      <div class="mb-4">
+        <label class="form-label">Age*</label>
+        <input type="number" name="age" required class="form-input" placeholder="e.g., 15">
+      </div>
+      <div class="mb-4">
+        <label class="form-label">Gender*</label>
+        <select name="gender" required class="form-input">
+          <option value="">Select Gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="mb-4">
+        <label class="form-label">Township</label>
+        <input type="text" name="township" class="form-input" placeholder="e.g., Soweto">
+      </div>
+      <div class="mb-4">
+        <label class="form-label">City*</label>
+        <input type="text" name="city" required class="form-input" placeholder="e.g., Johannesburg">
+      </div>
+      <div class="mb-4">
+        <label class="form-label">Postal Code</label>
+        <input type="text" name="postalCode" class="form-input" placeholder="e.g., 2000">
+      </div>
+      <div class="mb-4">
+        <label class="form-label">Province*</label>
+        <select name="province" required class="form-input">
+          <option value="">Select Province</option>
+          <option value="Gauteng">Gauteng</option>
+          <option value="Western Cape">Western Cape</option>
+          <option value="KwaZulu-Natal">KwaZulu-Natal</option>
+          <option value="Eastern Cape">Eastern Cape</option>
+          <option value="Free State">Free State</option>
+          <option value="Limpopo">Limpopo</option>
+          <option value="Mpumalanga">Mpumalanga</option>
+          <option value="Northern Cape">Northern Cape</option>
+          <option value="North West">North West</option>
+        </select>
+      </div>
+      <div class="mb-4">
+        <label class="form-label">Phone Number*</label>
+        <input type="tel" name="phone" required class="form-input" placeholder="e.g., +27831234567">
+      </div>
+      <div class="mb-4">
+        <label class="form-label">Email Address*</label>
+        <input type="email" name="email" required class="form-input" placeholder="e.g., student@gmail.com">
+      </div>
+      <div class="mb-4">
+        <label class="form-label">School Name</label>
+        <input type="text" name="school" class="form-input" placeholder="e.g., Parktown High">
+      </div>
+      <div class="mb-4">
+        <label class="form-label">Grade / Level</label>
+        <input type="text" name="grade" class="form-input" placeholder="e.g., Grade 10">
+      </div>
+      <div class="mb-4">
+        <label class="form-label">Subject*</label>
+        <input type="text" name="subject" required class="form-input" placeholder="e.g., Mathematics">
+      </div>
+      <div class="mb-4">
+        <label class="form-label">Topic*</label>
+        <input type="text" name="topic" required class="form-input" placeholder="e.g., Algebra">
+      </div>
+      <div class="mb-4">
+        <label class="form-label">Upload Questions (Image/PDF)</label>
+        <input type="file" name="questions" accept="image/*,.pdf" class="form-input">
+      </div>
+      <div class="mb-4">
+        <label class="form-label">Comments</label>
+        <textarea name="comments" class="form-input" placeholder="Any additional notes..."></textarea>
+      </div>
+      <div class="mb-4">
+        <label class="form-label">Booking Date & Time*</label>
+        <input type="text" id="datetime" name="datetime" required class="form-input" placeholder="Select date and time">
+      </div>
+      <div class="mb-4">
+        <label class="form-label">Payment Method</label>
+        <input type="text" name="paymentMethod" class="form-input" placeholder="e.g., Cash Send, EFT">
+      </div>
+      <div class="mb-4">
+        <label class="form-label">Upload Proof of Payment (Image/PDF)</label>
+        <input type="file" name="proofOfPayment" accept="image/*,.pdf" class="form-input">
+      </div>
+      <div class="mb-4 flex space-x-4">
+        <button id="paystack-button" type="button" class="btn-primary">Pay with Paystack (R100)</button>
+        <button id="book-without-payment" type="button" class="btn-secondary">Book Without Payment</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    // Initialize Flatpickr for date-time picker
+    flatpickr("#datetime", {
+      enableTime: true,
+      dateFormat: "Y-m-d H:00",
+      minDate: "today",
+      time_24hr: true,
+      minuteIncrement: 60 // Whole hours only
+      // Removed restrictions for 24/7/365 availability
+    });
+
+    // Handle form submission
+    const form = document.getElementById('bookingForm');
+    const paystackButton = document.getElementById('paystack-button');
+    const bookWithoutPaymentButton = document.getElementById('book-without-payment');
+
+    // Function to submit the form
+    function submitForm() {
+      fetch('/book', {
+        method: 'POST',
+        body: new FormData(form)
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            alert('Booking confirmed! You will receive an attendance link via email and/or SMS.');
+            form.reset();
+          } else {
+            alert('Booking failed: ' + data.message);
+          }
+        })
+        .catch(err => alert('Error: ' + err.message));
+    }
+
+    // Paystack payment
+    paystackButton.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+      const email = form.querySelector('[name="email"]').value;
+      const handler = PaystackPop.setup({
+        key: pk_test_e78e932e7f6832cb9fe7f2eba9e6e56f5708121d, // Replace with Test or Live Public Key
+        email: email,
+        amount: 10000, // R100 in kobo (100 kobo = 1 ZAR)
+        currency: 'ZAR',
+        callback: function(response) {
+          submitForm();
+        },
+        onClose: function() {
+          alert('Payment cancelled.');
+        }
+      });
+      handler.openIframe();
+    });
+
+    // Book without payment
+    bookWithoutPaymentButton.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+      submitForm();
+    });
+  </script>
+</body>
+</html>
