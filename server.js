@@ -4,6 +4,7 @@ const sqlite3 = require('sqlite3').verbose();
 const nodemailer = require('nodemailer');
 const twilio = require('twilio');
 const path = require('path');
+const { google } = require('googleapis');
 require('dotenv').config();
 
 const app = express();
@@ -54,6 +55,49 @@ db.run(`CREATE TABLE IF NOT EXISTS bookings (
   proofOfPaymentPath TEXT
 )`);
 
+// Google Calendar API setup
+const credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS);
+const { client_secret, client_id, redirect_uris } = credentials.web;
+const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uris[1]); // Use the Render redirect URI
+oAuth2Client.setCredentials(JSON.parse(process.env.GOOGLE_TOKEN));
+
+async function createCalendarEvent(booking) {
+  const calendar = google.calendar({ version: 'v3', auth: oAuth2Client });
+  const event = {
+    summary: `Tutoring Session: ${booking.subject} (${booking.topic})`,
+    description: `Student: ${booking.name} ${booking.surname}\nEmail: ${booking.email}\nPhone: ${booking.phone}\nJoin: ${meetLink}`,
+    start: {
+      dateTime: new Date(booking.datetime).toISOString(),
+      timeZone: 'Africa/Johannesburg',
+    },
+    end: {
+      dateTime: new Date(new Date(booking.datetime).getTime() + 60 * 60 * 1000).toISOString(), // 1-hour session
+      timeZone: 'Africa/Johannesburg',
+    },
+    conferenceData: {
+      createRequest: {
+        requestId: `from1to7-${booking.id}`,
+        conferenceSolutionKey: { type: 'hangoutsMeet' },
+      },
+    },
+    attendees: [
+      { email: booking.email },
+      { email: process.env.GMAIL_USER },
+    ],
+  };
+
+  try {
+    const response = await calendar.events.insert({
+      calendarId: 'primary',
+      resource: event,
+      conferenceDataVersion: 1,
+    });
+    console.log('Calendar event created:', response.data.htmlLink);
+  } catch (err) {
+    console.error('Error creating calendar event:', err.message);
+  }
+}
+
 app.use(express.json());
 app.use(express.static('public'));
 
@@ -93,16 +137,22 @@ app.post('/book', upload.fields([
         phone, email, school, grade, subject, topic, questionsPath, comments,
         datetime, meetLink, paymentMethod, proofOfPaymentPath
       ],
-      (err) => {
+      async function(err) {
         if (err) {
           console.error('Database error:', err.message);
           return res.status(500).json({ success: false, message: 'Database error' });
         }
 
+        const bookingId = this.lastID;
+        const booking = {
+          id: bookingId,
+          name, surname, email, phone, subject, topic, datetime,
+        };
+
         // Send email to tutor
         const tutorMailOptions = {
           from: '"From 1 to 7 Tutoring" <' + process.env.GMAIL_USER + '>',
-          to: process.env.GMAIL_USER, // Your email
+          to: process.env.GMAIL_USER,
           subject: 'New Booking Confirmation',
           html: `
             <p>Dear Mdu Mataboge,</p>
@@ -159,7 +209,7 @@ app.post('/book', upload.fields([
         twilioClient.messages.create({
           body: `New booking: ${name} ${surname} for ${subject} (${topic}) on ${datetime}. Payment: ${paymentMethod || 'Not specified'}. Join: ${meetLink}`,
           from: process.env.TWILIO_PHONE_NUMBER,
-          to: '+27766440806' // Your phone number
+          to: '+27766440806'
         }).then(message => {
           console.log('Tutor SMS sent:', message.sid);
         }).catch(error => {
@@ -177,6 +227,9 @@ app.post('/book', upload.fields([
           console.error('Student SMS error:', error.message);
         });
 
+        // Create Google Calendar event
+        await createCalendarEvent(booking);
+
         res.json({ success: true });
       }
     );
@@ -189,7 +242,7 @@ app.post('/book', upload.fields([
 // View all sessions (simple password protection)
 app.get('/sessions', (req, res) => {
   const password = req.query.password;
-  if (password !== 'tutor123') { // Simple password (change this to something secure)
+  if (password !== 'tutor123') {
     return res.status(401).send(`
       <h1>Unauthorized</h1>
       <p>Please enter the correct password.</p>
